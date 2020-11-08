@@ -33,14 +33,14 @@ class Visualiser:
         row = ["  "]
 
         for x_marker in self.coordinate_map:
-            row.append(" " + x_marker)
+            row.append(x_marker + " ")
 
         print("".join(row))
 
         # Render the rest of the cheese board
         for y, y_row in enumerate(self.map):
             # Render left side row numbers
-            row = [" " + str(y + 1)]
+            row = [str(y + 1) + " "]
 
             # Render battlefield
             for x, square in enumerate(y_row):
@@ -50,10 +50,10 @@ class Visualiser:
                 # Anybody out there?
                 if anybody is not None:
                     # Oh hai
-                    row.append(" " + anybody.name)
+                    row.append(anybody.name)
                 else:
                     # Print a simple dot
-                    row.append(" .")
+                    row.append(". ")
 
             # Print the entire row
             print("".join(row))
