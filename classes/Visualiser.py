@@ -52,7 +52,7 @@ class Visualiser:
                     # Oh hai
                     row.append(" " + anybody.name)
                 else:
-                    # Print a simple dot!
+                    # Print a simple dot
                     row.append(" .")
 
             # Print the entire row
