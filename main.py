@@ -1,10 +1,9 @@
-from classes.Board import Board
-from classes.Visualiser import Visualiser
-from classes.Piece import Piece
+from classes.Game import Game
 
 def main():
-    Board()
-    Visualiser()
+    the_game = Game()
+
+    the_game.visualise()
 
 if __name__ == '__main__':
     main()
