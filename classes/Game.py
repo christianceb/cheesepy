@@ -3,6 +3,8 @@ from classes.Board import Board
 
 
 class Game:
+    __white_turn = True
+
     def __init__(self):
         self.visualiser = Visualiser()
         self.board = Board()
@@ -28,7 +30,13 @@ class Game:
         origin = self.atlas_to_cartesian_coordinates(origin)
         destination = self.atlas_to_cartesian_coordinates(destination)
 
-        return self.board.move(*origin, *destination)
+        move = self.board.move(*origin, *destination, self.__white_turn)
+
+        if move.value > 0:
+            # Invert current turn if move was successful
+            self.__white_turn = not self.__white_turn
+
+        return move
 
     def atlas_to_cartesian_coordinates(self, cell):
         """
@@ -46,7 +54,7 @@ class Game:
 
     def translate_a(self, letter):
         """
-        Translate atlas coordinate alphabet to its zero-indexed numeric value
+        Translate a(tlas) coordinate alphabet to its zero-indexed numeric value
         :param letter: letter to translate
         :return: integer
         """

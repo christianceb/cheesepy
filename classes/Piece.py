@@ -5,10 +5,14 @@ class Piece:
     __x = None
     __y = None
     name = "X"
+    __white = True
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, white=True):
         self.__x = x
         self.__y = y
+        self.__white = white
+
+        self.name = "W" + self.name if white else "B" + self.name
 
         # See self.__str__() for how this is used
         self.__timestamp = int(time.time())
@@ -20,6 +24,9 @@ class Piece:
         :return: The timestamp in a string format
         """
         return str(self.__timestamp)
+
+    def is_white(self):
+        return True if self.__white else False
 
     def is_in(self, x, y):
         """

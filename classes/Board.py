@@ -11,9 +11,9 @@ class Board:
 
     def __build_starting_pieces(self):
         self.pieces.append(Piece(*[0, 0]))
-        self.pieces.append(Piece(*[1, 1]))
+        self.pieces.append(Piece(*[1, 1], False))
 
-    def move(self, x, y, to_x, to_y):
+    def move(self, x, y, to_x, to_y, whites_turn):
         """
         Move a piece on the board. Will test the following conditions before moving:
         1. A self-pwn
@@ -30,6 +30,7 @@ class Board:
         :param y: origin column
         :param to_x: destination row
         :param to_y: destination column
+        :param whites_turn: boolean use this value to test MoveStatus.ERR_WAIT_TURN
         :return: an integer corresponding to a result
         """
 
@@ -43,6 +44,9 @@ class Board:
         if piece is None:
             return MoveStatus.ERR_ENOENT
 
+        if piece.is_white() != whites_turn:
+            return MoveStatus.ERR_WAIT_TURN
+
         # Check if the move is legal
         if not piece.validate_move(*[to_x, to_y]):
             return MoveStatus.ERR_MOVE_ILLEGAL
@@ -52,8 +56,11 @@ class Board:
         target_piece = self.who_is_in(*[to_x, to_y])
 
         if target_piece is not None:
-            self.pieces.remove(target_piece)
-            kill = True
+            if target_piece.is_white() and piece.is_white():
+                return MoveStatus.ERR_FF
+            else:
+                self.pieces.remove(target_piece)
+                kill = True
 
         # Finally move the piece
         piece.move(*[to_x, to_y])
