@@ -1,6 +1,7 @@
 from classes.Visualiser import Visualiser
 from classes.Board import Board
 from classes.MoveStatus import MoveStatus
+from classes.Logger import Logger
 
 
 class Game:
@@ -11,6 +12,7 @@ class Game:
     def __init__(self):
         self.visualiser = Visualiser()
         self.board = Board()
+        self.logger = Logger()
 
     def visualise(self):
         """
@@ -29,6 +31,8 @@ class Game:
         :return: the result of the move
         """
 
+        result = None
+
         # Filter out non-standard moves except castling
         if destination is None and origin not in self.__castling_moves:
             return MoveStatus.ERR_UNRECOGNISED
@@ -40,19 +44,29 @@ class Game:
                 # Invert current turn if move was successful
                 self.__white_turn = not self.__white_turn
 
-            return castle_result
+            result = castle_result
         else:
             # Convert atlas coordinates to cartesian coordinates
-            origin = self.atlas_to_cartesian_coordinates(origin)
-            destination = self.atlas_to_cartesian_coordinates(destination)
+            cartesian_origin = self.atlas_to_cartesian_coordinates(origin)
+            cartesian_destination = self.atlas_to_cartesian_coordinates(destination)
 
-            move = self.board.move(*origin, *destination, self.__white_turn)
+            move = self.board.move(*cartesian_origin, *cartesian_destination, self.__white_turn)
 
             if move.value > 0:
                 # Invert current turn if move was successful
                 self.__white_turn = not self.__white_turn
 
-            return move
+            result = move
+
+        if result.value > 0:
+            separator = "-" if result is not MoveStatus.OK_KILL else "x"
+
+            final_destination = separator + destination if destination is not None else ""
+
+            self.logger.log(origin + final_destination)
+
+        return result
+
 
     def atlas_to_cartesian_coordinates(self, cell):
         """

@@ -1,0 +1,13 @@
+g1-f3
+g8-f6
+f1-a6
+f8-a3
+d1-d4
+d8-d5
+c1-h6
+c8-h3
+b1-c3
+b8-c6
+O-O-O
+O-O
+h1xh3

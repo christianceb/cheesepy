@@ -1,4 +1,3 @@
-from classes.Piece import Piece
 from classes.Pieces import Rook, Knight, Bishop, Queen, King
 from classes.MoveStatus import MoveStatus
 
@@ -31,22 +30,9 @@ class Board:
         self.pieces.append(Knight(*[6, 7]))
         self.pieces.append(Rook(*[7, 7]))
 
-        # Demo pieces
-        # self.pieces.append(Piece(*[0, 0]))
-        # self.pieces.append(Piece(*[1, 1], False))
-
     def move(self, x, y, to_x, to_y, whites_turn):
         """
-        Move a piece on the board. Will test the following conditions before moving:
-        1. A self-pwn
-        2. Out-of-bounds test
-        3. If nobody is in the origin coordinate
-        4. If the move is valid based on the piece's unique movement
-
-        Other conditions needing implementation
-        1. collider
-        2. castling
-        3. promotion? (out of scope)
+        Move a piece on the board. Will test a good amount of conditions prior to moving
 
         :param x: origin row
         :param y: origin column
@@ -95,6 +81,14 @@ class Board:
         return MoveStatus.OK_KILL if kill else MoveStatus.OK_MOVE
 
     def has_collisions(self, piece, x, y):
+        """
+        Dead-reckon a piece's path and check for any collisions
+
+        :param piece: Our piece
+        :param x: destination X
+        :param y: destination Y
+        :return: True if there is a collision. False otherwise.
+        """
         reached_destination = False
         collided = False
         x_tg, y_tg = piece.get_pos()  # tg = t(ele)g(raphed) movement

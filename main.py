@@ -8,6 +8,7 @@ def main():
     print(the_game.move("O-O-O"))
     print(the_game.move("O-O"))
     print(the_game.move("O-O-O"))
+    print(the_game.move("h1", "h3"))
 
     the_game.visualise()
 
