@@ -1,18 +1,19 @@
 import time
+from math import sqrt
 
 
 class Piece:
-    __x = None
-    __y = None
+    _x = None
+    _y = None
     name = "X"
     __white = True
 
     def __init__(self, x, y, white=True):
-        self.__x = x
-        self.__y = y
+        self._x = x
+        self._y = y
         self.__white = white
 
-        self.name = "W" + self.name if white else "B" + self.name
+        self.name = "w" + self.name if white else "b" + self.name
 
         # See self.__str__() for how this is used
         self.__timestamp = int(time.time())
@@ -36,7 +37,7 @@ class Piece:
         :param y:
         :return: True if the piece is on the provided positions
         """
-        if x == self.__x and y == self.__y:
+        if x == self._x and y == self._y:
             return True
 
         return False
@@ -50,8 +51,8 @@ class Piece:
         :return: True if the piece was moved successfully. False if it made an illegal move
         """
         if self.validate_move(*[x, y]):
-            self.__x = x
-            self.__y = y
+            self._x = x
+            self._y = y
 
             return True
 
@@ -60,14 +61,48 @@ class Piece:
     def validate_move(self, x, y):
         """
         Contains all move validation logic specific to this piece. No other validation should be done here
-        Instead, see piece_move_validate
 
         :param x: The new x position
         :param y: The new y position
         :return: True if move was valid. Otherwise, false
         """
         # Determine if new position is within range (1)
-        if abs(x - self.__x) in [0, 1] and abs(y - self.__y) in [0, 1]:
+        if abs(x - self._x) in [0, 1] and abs(y - self._y) in [0, 1]:
             return True
 
         return False
+
+    def is_new_pos_linear(self, x, y):
+        """
+        Use the m of 2 positions to determine if it is a linear move
+
+        :param x: New x position
+        :param y: New y position
+        :return: True if linear, False otherwise
+        """
+
+        # Prevent division-by-zero errors by checking for planar movement first
+        if not self.is_new_pos_straight(*[x, y]):
+            slope = (y - self._y) / (x - self._x)
+
+            if slope % 1 == 0:
+                return True
+
+        return False
+
+    def is_new_pos_straight(self, x, y):
+        """
+        Check if piece is moving in a straight line
+
+        :param x: New x position
+        :param y: New y position
+        :return: True if moving in a straight line, False otherwise
+        """
+        # Straight line moves only (XOR x and y)
+        if (self._x == x) ^ (self._y == y):
+            return True
+
+        return False
+
+    def get_c(self, x, y):
+        return sqrt((x - self._x) ** 2 + (y - self._y) ** 2)

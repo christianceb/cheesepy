@@ -5,8 +5,12 @@ def main():
     the_game = Game()
 
     the_game.visualise()
-    print(the_game.move("a1", "b1"))
-    print(the_game.move("b2", "b3"))
+
+    print(the_game.move("f1", "a6"))
+
+    # print(the_game.move("a1", "b1"))
+    # print(the_game.move("b2", "b3"))
+
     the_game.visualise()
 
 

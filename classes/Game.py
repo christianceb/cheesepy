@@ -4,6 +4,7 @@ from classes.Board import Board
 
 class Game:
     __white_turn = True
+    __dimensions = 8
 
     def __init__(self):
         self.visualiser = Visualiser()
@@ -47,8 +48,8 @@ class Game:
         """
         cell = list(cell)
 
-        cell[0] = self.translate_a(cell[0])
-        cell[1] = int(cell[1]) - 1
+        cell[0] = self.translate_a(cell[0])  # X
+        cell[1] = abs(int(cell[1]) - self.__dimensions)  # Y
 
         return cell
 

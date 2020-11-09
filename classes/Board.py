@@ -1,4 +1,5 @@
 from classes.Piece import Piece
+from classes.Pieces import Rook, Knight, Bishop, Queen, King
 from classes.MoveStatus import MoveStatus
 
 
@@ -10,8 +11,29 @@ class Board:
         self.__build_starting_pieces()
 
     def __build_starting_pieces(self):
-        self.pieces.append(Piece(*[0, 0]))
-        self.pieces.append(Piece(*[1, 1], False))
+        # Black pieces
+        self.pieces.append(Rook(*[0, 0], False))
+        self.pieces.append(Knight(*[1, 0], False))
+        self.pieces.append(Bishop(*[2, 0], False))
+        self.pieces.append(Queen(*[3, 0], False))
+        self.pieces.append(King(*[4, 0], False))
+        self.pieces.append(Bishop(*[5, 0], False))
+        self.pieces.append(Knight(*[6, 0], False))
+        self.pieces.append(Rook(*[7, 0], False))
+
+        # White pieces
+        self.pieces.append(Rook(*[0, 7]))
+        self.pieces.append(Knight(*[1, 7]))
+        self.pieces.append(Bishop(*[2, 7]))
+        self.pieces.append(Queen(*[3, 7]))
+        self.pieces.append(King(*[4, 7]))
+        self.pieces.append(Bishop(*[5, 7]))
+        self.pieces.append(Knight(*[6, 7]))
+        self.pieces.append(Rook(*[7, 7]))
+
+        # Demo pieces
+        # self.pieces.append(Piece(*[0, 0]))
+        # self.pieces.append(Piece(*[1, 1], False))
 
     def move(self, x, y, to_x, to_y, whites_turn):
         """
@@ -51,10 +73,11 @@ class Board:
         if not piece.validate_move(*[to_x, to_y]):
             return MoveStatus.ERR_MOVE_ILLEGAL
 
-        # TODO: logic for comparing against the target piece goes here
         kill = False
         target_piece = self.who_is_in(*[to_x, to_y])
 
+        # TODO: logic for comparing against the target piece goes here
+        # TODO: castling logic
         if target_piece is not None:
             if target_piece.is_white() and piece.is_white():
                 return MoveStatus.ERR_FF
