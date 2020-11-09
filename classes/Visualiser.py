@@ -53,7 +53,7 @@ class Visualiser:
                     row.append(anybody.name)
                 else:
                     # Print a simple dot
-                    row.append(". ")
+                    row.append(" .")
 
             # Print the entire row
             print("".join(row))

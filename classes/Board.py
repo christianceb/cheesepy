@@ -19,7 +19,7 @@ class Board:
         self.pieces.append(King(*[4, 0], False))
         self.pieces.append(Bishop(*[5, 0], False))
         self.pieces.append(Knight(*[6, 0], False))
-        self.pieces.append(Rook(*[7, 4], False))
+        self.pieces.append(Rook(*[7, 0], False))
 
         # White pieces
         self.pieces.append(Rook(*[0, 7]))
@@ -125,6 +125,69 @@ class Board:
                 reached_destination = True
 
         return collided
+
+    def castle(self, white_to_castle, king_side):
+        """
+        I am tired and I just want to get castling working irregardless of how WET this method becomes
+
+        Also no collision detection so good luck implementing it later!
+
+        :param white_to_castle:
+        :param king_side:
+        :return: MoveStatus
+        """
+        if white_to_castle:
+            king = self.who_is_in(*[4, 7])
+
+            if not isinstance(king, King) or not king.can_castle():
+                return MoveStatus.ERR_CANT_CASTLE
+
+            if king_side:
+                rook = self.who_is_in(*[7, 7])
+
+                if not isinstance(rook, Rook) or not rook.can_castle():
+                    return MoveStatus.ERR_CANT_CASTLE
+                else:
+                    king.goto_xy(*[6, 7])
+                    rook.goto_xy(*[5, 7])
+
+                    return MoveStatus.OK_CASTLED
+            else:
+                rook = self.who_is_in(*[0, 7])
+
+                if not isinstance(rook, Rook) or not rook.can_castle():
+                    return MoveStatus.ERR_CANT_CASTLE
+                else:
+                    king.goto_xy(*[2, 7])
+                    rook.goto_xy(*[3, 7])
+
+                    return MoveStatus.OK_CASTLED
+        else:
+            king = self.who_is_in(*[4, 0])
+
+            if not isinstance(king, King) or not king.can_castle():
+                return MoveStatus.ERR_CANT_CASTLE
+
+            if king_side:
+                rook = self.who_is_in(*[7, 0])
+
+                if not isinstance(rook, Rook) or not rook.can_castle():
+                    return MoveStatus.ERR_CANT_CASTLE
+                else:
+                    king.goto_xy(*[6, 0])
+                    rook.goto_xy(*[5, 0])
+
+                    return MoveStatus.OK_CASTLED
+            else:
+                rook = self.who_is_in(*[0, 0])
+
+                if not isinstance(rook, Rook) or not rook.can_castle():
+                    return MoveStatus.ERR_CANT_CASTLE
+                else:
+                    king.goto_xy(*[2, 0])
+                    rook.goto_xy(*[3, 0])
+
+                    return MoveStatus.OK_CASTLED
 
     @staticmethod
     def move_forward(a, b):

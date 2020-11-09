@@ -2,14 +2,22 @@ from classes.Piece import Piece
 
 
 class Rook(Piece):
-    name = "R"
+    name = "r"
+    _can_castle = True
 
     def validate_move(self, x, y):
         return self.is_new_pos_straight(*[x, y])
 
+    def move_hook(self):
+        if self._can_castle:
+            self._can_castle = False
+
+    def can_castle(self):
+        return self._can_castle
+
 
 class Knight(Piece):
-    name = "k"
+    name = "n"
     __c = 2.23606797749979  # Constant right-triangle hypotenuse (range) for a knight
     _collider = False
 
@@ -19,14 +27,14 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
-    name = "B"
+    name = "b"
 
     def validate_move(self, x, y):
         return self.is_new_pos_linear(*[x, y])
 
 
 class Queen(Piece):
-    name = "Q"
+    name = "q"
 
     def validate_move(self, x, y):
         new_pos = [x, y]
@@ -35,8 +43,9 @@ class Queen(Piece):
 
 
 class King(Piece):
-    name = "K"
+    name = "k"
     __c = 1.4142135623730951  # Constant right-triangle hypotenuse (range) for a king
+    _can_castle = True
 
     def validate_move(self, x, y):
         new_pos = [x, y]
@@ -48,3 +57,10 @@ class King(Piece):
                 return True
 
         return False
+
+    def move_hook(self):
+        if self._can_castle:
+            self._can_castle = False
+
+    def can_castle(self):
+        return self._can_castle

@@ -14,7 +14,8 @@ class Piece:
         self._y = y
         self.__white = white
 
-        self.name = "w" + self.name if white else "b" + self.name
+        self.name = self.name.lower() if white else self.name.upper()
+        self.name = " " + self.name
 
         # See self.__str__() for how this is used
         self.__timestamp = int(time.time())
@@ -61,9 +62,26 @@ class Piece:
             self._x = x
             self._y = y
 
+            self.move_hook()
+
             return True
 
         return False
+
+    def goto_xy(self, x, y, run_hook=True):
+        """
+        Ignore all logic and just move the piece to the coordinates
+
+        :param x: The new x position
+        :param y: The new y position
+        :param run_hook: If False, self.move_hook() will not run
+        :return: void
+        """
+        self._x = x
+        self._y = y
+
+        if run_hook:
+            self.move_hook()
 
     def validate_move(self, x, y):
         """
@@ -78,6 +96,13 @@ class Piece:
             return True
 
         return False
+
+    def move_hook(self):
+        """
+        Override function to do additional operations in self.move() or self.goto_xy() (depending on run_hook)
+        :return:
+        """
+        return
 
     def is_new_pos_linear(self, x, y):
         """

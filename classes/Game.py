@@ -1,10 +1,12 @@
 from classes.Visualiser import Visualiser
 from classes.Board import Board
+from classes.MoveStatus import MoveStatus
 
 
 class Game:
     __white_turn = True
     __dimensions = 8
+    __castling_moves = ["O-O", "O-O-O"]
 
     def __init__(self):
         self.visualiser = Visualiser()
@@ -18,7 +20,7 @@ class Game:
         """
         self.visualiser.print(self.board)
 
-    def move(self, origin, destination):
+    def move(self, origin, destination=None):
         """
         Move the piece if it is valid
 
@@ -27,17 +29,30 @@ class Game:
         :return: the result of the move
         """
 
-        # Convert atlas coordinates to cartesian coordinates
-        origin = self.atlas_to_cartesian_coordinates(origin)
-        destination = self.atlas_to_cartesian_coordinates(destination)
+        # Filter out non-standard moves except castling
+        if destination is None and origin not in self.__castling_moves:
+            return MoveStatus.ERR_UNRECOGNISED
 
-        move = self.board.move(*origin, *destination, self.__white_turn)
+        if origin in self.__castling_moves:
+            castle_result = self.board.castle(self.__white_turn, True if origin == "O-O" else False)
 
-        if move.value > 0:
-            # Invert current turn if move was successful
-            self.__white_turn = not self.__white_turn
+            if castle_result is MoveStatus.OK_CASTLED:
+                # Invert current turn if move was successful
+                self.__white_turn = not self.__white_turn
 
-        return move
+            return castle_result
+        else:
+            # Convert atlas coordinates to cartesian coordinates
+            origin = self.atlas_to_cartesian_coordinates(origin)
+            destination = self.atlas_to_cartesian_coordinates(destination)
+
+            move = self.board.move(*origin, *destination, self.__white_turn)
+
+            if move.value > 0:
+                # Invert current turn if move was successful
+                self.__white_turn = not self.__white_turn
+
+            return move
 
     def atlas_to_cartesian_coordinates(self, cell):
         """
