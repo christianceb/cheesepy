@@ -11,6 +11,7 @@ class Rook(Piece):
 class Knight(Piece):
     name = "k"
     __c = 2.23606797749979  # Constant right-triangle hypotenuse (range) for a knight
+    _collider = False
 
     def validate_move(self, x, y):
         # A knight's move when graphed between points always has their c (hypotenuse) set to abs(self.__c)

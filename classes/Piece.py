@@ -7,6 +7,7 @@ class Piece:
     _y = None
     name = "X"
     __white = True
+    _collider = True
 
     def __init__(self, x, y, white=True):
         self._x = x
@@ -25,6 +26,12 @@ class Piece:
         :return: The timestamp in a string format
         """
         return str(self.__timestamp)
+
+    def can_collide(self):
+        return self._collider
+
+    def get_pos(self):
+        return [self._x, self._y]
 
     def is_white(self):
         return True if self.__white else False

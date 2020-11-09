@@ -6,7 +6,7 @@ def main():
 
     the_game.visualise()
 
-    print(the_game.move("f1", "a6"))
+    print(the_game.move("h1", "h5"))
 
     # print(the_game.move("a1", "b1"))
     # print(the_game.move("b2", "b3"))

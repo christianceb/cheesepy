@@ -19,7 +19,7 @@ class Board:
         self.pieces.append(King(*[4, 0], False))
         self.pieces.append(Bishop(*[5, 0], False))
         self.pieces.append(Knight(*[6, 0], False))
-        self.pieces.append(Rook(*[7, 0], False))
+        self.pieces.append(Rook(*[7, 4], False))
 
         # White pieces
         self.pieces.append(Rook(*[0, 7]))
@@ -44,7 +44,7 @@ class Board:
         4. If the move is valid based on the piece's unique movement
 
         Other conditions needing implementation
-        1. if the target coordinate contains a different piece but is own team (prevent friendly-fire)
+        1. collider
         2. castling
         3. promotion? (out of scope)
 
@@ -73,6 +73,10 @@ class Board:
         if not piece.validate_move(*[to_x, to_y]):
             return MoveStatus.ERR_MOVE_ILLEGAL
 
+        # Collider test
+        if piece.can_collide() and self.has_collisions(piece, *[to_x, to_y]):
+            return MoveStatus.ERR_COLLIDE
+
         kill = False
         target_piece = self.who_is_in(*[to_x, to_y])
 
@@ -89,6 +93,49 @@ class Board:
         piece.move(*[to_x, to_y])
 
         return MoveStatus.OK_KILL if kill else MoveStatus.OK_MOVE
+
+    def has_collisions(self, piece, x, y):
+        reached_destination = False
+        collided = False
+        x_tg, y_tg = piece.get_pos()  # tg = t(ele)g(raphed) movement
+        x_direction = self.move_forward(x_tg, x)
+        y_direction = self.move_forward(y_tg, y)
+
+        while not reached_destination and not collided:
+            # Offset to destination based on direction
+            if x_tg != x:
+                x_tg += x_direction
+            if y_tg != y:
+                y_tg += y_direction
+
+            # Check for anybody in the path
+            piece_in_position = self.who_is_in(*[x_tg, y_tg])
+
+            # Collided with a piece but might not yet be the end of it
+            if piece_in_position:
+                if y_tg == y and x == x_tg:
+                    # Collided at destination. What could it be?
+                    if not (piece_in_position.is_white() ^ piece.is_white()):
+                        collided = True
+                else:
+                    # Collided with a piece even before reaching destination
+                    collided = True
+
+            if y_tg == y and x == x_tg:
+                reached_destination = True
+
+        return collided
+
+    @staticmethod
+    def move_forward(a, b):
+        delta = b - a
+
+        if delta < 0:
+            return -1
+        elif delta > 0:
+            return 1
+
+        return 0
 
     def who_is_in(self, x, y):
         """
