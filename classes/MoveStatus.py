@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class MoveStatus(Enum):
-    ERR_CANT_CASTLE = -8  # Unrecognised move
+    ERR_CANT_CASTLE = -8  # Self-explanatory
     ERR_UNRECOGNISED = -7  # Unrecognised move
     ERR_COLLIDE = -6  # Move collides with a piece
     ERR_WAIT_TURN = -5  # Wait for your turn

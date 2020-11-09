@@ -67,7 +67,6 @@ class Game:
 
         return result
 
-
     def atlas_to_cartesian_coordinates(self, cell):
         """
         Convert atlas grid coordinate to cartesian coordinates

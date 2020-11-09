@@ -4,13 +4,33 @@ from classes.Game import Game
 def main():
     the_game = Game()
 
+    # Play a scenario (uncomment a scenario)
+    castling(the_game)
+    #friendly_fire(the_game)
+
+    the_game.visualise()
+
+
+def friendly_fire(the_game):
+    """
+    Test friendly fire. Although due to the order of the validation, ERR_COLLIDE will be returned
+    :param the_game:
+    :return:
+    """
+    print(the_game.move("a1", "b1"))
+
+
+def castling(the_game):
+    """
+    Demo castling and capture
+    :param the_game:
+    :return:
+    """
     prepare_for_castling(the_game)
     print(the_game.move("O-O-O"))
     print(the_game.move("O-O"))
-    print(the_game.move("O-O-O"))
-    print(the_game.move("h1", "h3"))
-
-    the_game.visualise()
+    print(the_game.move("O-O-O"))  # Should not be able to castle
+    print(the_game.move("h1", "h3"))  # capture
 
 
 def prepare_for_castling(the_game):

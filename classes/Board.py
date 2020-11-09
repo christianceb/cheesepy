@@ -185,6 +185,13 @@ class Board:
 
     @staticmethod
     def move_forward(a, b):
+        """
+        Determine which direction should you go from b to a
+
+        :param a: origin
+        :param b: destination
+        :return: -1 if you have to go backwards. 1 to move forward. Otherwise, 0 to remain stationary
+        """
         delta = b - a
 
         if delta < 0:
