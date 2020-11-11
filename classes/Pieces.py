@@ -69,3 +69,16 @@ class King(Piece):
 
     def can_castle(self):
         return self._can_castle
+
+
+class Pawn(Piece):
+    name = "p"
+    value = 1
+
+    def validate_move(self, x, y):
+        new_pos = [x, y]
+
+        if self.get_c(*new_pos) == 1:  # 1 (square) is our planar range on this similar to a king
+            return True
+
+        return False

@@ -1,4 +1,4 @@
-from classes.Pieces import Rook, Knight, Bishop, Queen, King
+from classes.Pieces import Rook, Knight, Bishop, Queen, King, Pawn
 from classes.MoveStatus import MoveStatus
 
 
@@ -20,6 +20,9 @@ class Board:
         self.pieces.append(Knight(*[6, 0], False))
         self.pieces.append(Rook(*[7, 0], False))
 
+        for i in range(8):
+            self.pieces.append(Pawn(*[i, 1], False))
+
         # White pieces
         self.pieces.append(Rook(*[0, 7]))
         self.pieces.append(Knight(*[1, 7]))
@@ -29,6 +32,9 @@ class Board:
         self.pieces.append(Bishop(*[5, 7]))
         self.pieces.append(Knight(*[6, 7]))
         self.pieces.append(Rook(*[7, 7]))
+
+        for i in range(8):
+            self.pieces.append(Pawn(*[i, 6]))
 
     def move(self, x, y, to_x, to_y, whites_turn):
         """
