@@ -1,7 +1,7 @@
 from classes.Visualiser import Visualiser
 from classes.Board import Board
 from classes.MoveStatus import MoveStatus
-from classes.Logger import Logger
+from classes.GameLogger import GameLogger
 
 
 class Game:
@@ -12,7 +12,7 @@ class Game:
     def __init__(self):
         self.visualiser = Visualiser()
         self.board = Board()
-        self.logger = Logger()
+        self.__game_logger = GameLogger()
 
     def visualise(self):
         """
@@ -21,6 +21,9 @@ class Game:
         :return: void
         """
         self.visualiser.print(self.board)
+
+    def persist_state_to_file(self):
+        self.__game_logger.state_to_file(self.board)
 
     def move(self, origin, destination=None):
         """
@@ -62,8 +65,6 @@ class Game:
             separator = "-" if result is not MoveStatus.OK_KILL else "x"
 
             final_destination = separator + destination if destination is not None else ""
-
-            self.logger.log(origin + final_destination)
 
         return result
 

@@ -9,6 +9,7 @@ def main():
     #friendly_fire(the_game)
 
     the_game.visualise()
+    the_game.persist_state_to_file()
 
 
 def friendly_fire(the_game):

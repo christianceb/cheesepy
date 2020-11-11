@@ -57,3 +57,7 @@ class Visualiser:
 
             # Print the entire row
             print("".join(row))
+
+    @staticmethod
+    def to_algebraic(x, y):
+        return Visualiser.coordinate_map[x] + str(abs((y - Visualiser.__dimensions)))

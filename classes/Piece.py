@@ -8,6 +8,7 @@ class Piece:
     name = "X"
     __white = True
     _collider = True
+    value = 0
 
     def __init__(self, x, y, white=True):
         self._x = x

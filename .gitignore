@@ -133,3 +133,4 @@ dmypy.json
 __pycache__
 
 # Ignore game log files
+log.txt
