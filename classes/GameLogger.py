@@ -14,7 +14,9 @@ class GameLogger:
         :param board: The current game board
         :return:
         """
+        self.logger.clear()
         stream = self.logger.stream()
+
         char_offset = 5
 
         # Sort pieces nicely by camo and valuation

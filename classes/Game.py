@@ -2,6 +2,7 @@ from classes.Visualiser import Visualiser
 from classes.Board import Board
 from classes.MoveStatus import MoveStatus
 from classes.GameLogger import GameLogger
+from classes.GameHistory import GameHistory
 
 
 class Game:
@@ -9,10 +10,29 @@ class Game:
     __dimensions = 8
     __castling_moves = ["O-O", "O-O-O"]
 
-    def __init__(self):
+    def __init__(self,
+                 print_board_after_move=False,
+                 print_move_result=False,
+                 always_persist_board_state=True,
+                 show_recent_moves=False):
+        """
+        Instantiates the game of chess. Pass parameters as needed to suit your liking
+
+        :param print_board_after_move: False by default
+        :param print_move_result: False by default
+        :param always_persist_board_state: True by default
+        :param show_recent_moves: False by default
+        """
         self.visualiser = Visualiser()
         self.board = Board()
         self.__game_logger = GameLogger()
+        self.__game_history = GameHistory()
+
+        # Game options. Refer to variable names for the acronym meanings
+        self.__pbam = print_board_after_move
+        self.__pmr = print_move_result
+        self.__apbs = always_persist_board_state
+        self.__srm = show_recent_moves
 
     def visualise(self):
         """
@@ -66,7 +86,38 @@ class Game:
 
             final_destination = separator + destination if destination is not None else ""
 
+            # Print a shoddy chessboard as needed
+            if self.__pbam:
+                self.visualise()
+
+            # Log and print this movement
+            if self.__srm:
+                self.__game_history.log(not self.__white_turn, origin, destination)
+                self.print_recent_moves()
+
+            # Persist file if set
+            if self.__apbs:
+                self.persist_state_to_file()
+
+        # Print move result irregardless if successful or not
+        if self.__pmr:
+            print(result)
+
+        # Give a nice separator if some game settings are up
+        if self.__pbam or self.__pmr or self.__srm:
+            print(("=" * 100) + "\n\n\n")
+
         return result
+
+    def print_recent_moves(self):
+        """
+        Print recent moves by both players in a horizontal fashion
+
+        :return:
+        """
+        print('.' * 100)
+        self.__game_history.nice_print_history()
+        print('.' * 100)
 
     def atlas_to_cartesian_coordinates(self, cell):
         """

@@ -7,3 +7,7 @@ class Logger:
 
     def stream(self):
         return self.__file
+
+    def clear(self):
+        self.__file.truncate(0)
+        self.__file.seek(0)
