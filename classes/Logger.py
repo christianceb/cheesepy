@@ -3,7 +3,7 @@ class Logger:
         self.__file = open("log.txt", 'w+')
 
     def log(self, value):
-        self.__file.write( value + "\n")
+        self.__file.write(value + "\n")
 
     def stream(self):
         return self.__file

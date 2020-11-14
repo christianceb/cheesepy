@@ -11,30 +11,30 @@ class Board:
 
     def __build_starting_pieces(self):
         # Black pieces
-        self.pieces.append(Rook(*[0, 0], False))
-        self.pieces.append(Knight(*[1, 0], False))
-        self.pieces.append(Bishop(*[2, 0], False))
-        self.pieces.append(Queen(*[3, 0], False))
-        self.pieces.append(King(*[4, 0], False))
-        self.pieces.append(Bishop(*[5, 0], False))
-        self.pieces.append(Knight(*[6, 0], False))
-        self.pieces.append(Rook(*[7, 0], False))
+        self.pieces.append(Rook(*[0, 0], 12, False))
+        self.pieces.append(Knight(*[1, 0], 8, False))
+        self.pieces.append(Bishop(*[2, 0], 10, False))
+        self.pieces.append(Queen(*[3, 0], 14, False))
+        self.pieces.append(King(*[4, 0], 15, False))
+        self.pieces.append(Bishop(*[5, 0], 11, False))
+        self.pieces.append(Knight(*[6, 0], 9, False))
+        self.pieces.append(Rook(*[7, 0], 13, False))
 
         for i in range(8):
-            self.pieces.append(Pawn(*[i, 1], False))
+            self.pieces.append(Pawn(*[i, 1], i, False))
 
         # White pieces
-        self.pieces.append(Rook(*[0, 7]))
-        self.pieces.append(Knight(*[1, 7]))
-        self.pieces.append(Bishop(*[2, 7]))
-        self.pieces.append(Queen(*[3, 7]))
-        self.pieces.append(King(*[4, 7]))
-        self.pieces.append(Bishop(*[5, 7]))
-        self.pieces.append(Knight(*[6, 7]))
-        self.pieces.append(Rook(*[7, 7]))
+        self.pieces.append(Rook(*[0, 7], 28))
+        self.pieces.append(Knight(*[1, 7], 24))
+        self.pieces.append(Bishop(*[2, 7], 26))
+        self.pieces.append(Queen(*[3, 7], 30))
+        self.pieces.append(King(*[4, 7], 31))
+        self.pieces.append(Bishop(*[5, 7], 27))
+        self.pieces.append(Knight(*[6, 7], 25))
+        self.pieces.append(Rook(*[7, 7], 29))
 
-        for i in range(8):
-            self.pieces.append(Pawn(*[i, 6]))
+        for i in range(16, 24):
+            self.pieces.append(Pawn(*[i-16, 6], i))
 
     def move(self, x, y, to_x, to_y, whites_turn):
         """

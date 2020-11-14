@@ -34,6 +34,10 @@ class Game:
         self.__apbs = always_persist_board_state
         self.__srm = show_recent_moves
 
+        # Persist initial state
+        if self.__apbs:
+            self.persist_state_to_file()
+
     def visualise(self):
         """
         Visualise the board in console. No budget for a 3D cheeseboard here, a charcuterie might be cheaper
@@ -44,6 +48,9 @@ class Game:
 
     def persist_state_to_file(self):
         self.__game_logger.state_to_file(self.board)
+
+    def persist_move_to_file(self, origin, destination=None):
+        self.__game_logger.action_to_file(origin, destination)
 
     def move(self, origin, destination=None):
         """
@@ -61,7 +68,15 @@ class Game:
             return MoveStatus.ERR_UNRECOGNISED
 
         if origin in self.__castling_moves:
-            castle_result = self.board.castle(self.__white_turn, True if origin == "O-O" else False)
+            king_side = True if origin == "O-O" else False
+
+            if self.__apbs:
+                # Get our pieces for later use before they move
+                origin_piece = self.get_castling_piece()
+                destination_piece = self.get_castling_piece(king_side, False)
+
+            """ Run castling move"""
+            castle_result = self.board.castle(self.__white_turn, king_side)
 
             if castle_result is MoveStatus.OK_CASTLED:
                 # Invert current turn if move was successful
@@ -71,8 +86,11 @@ class Game:
         else:
             # Convert atlas coordinates to cartesian coordinates
             cartesian_origin = self.atlas_to_cartesian_coordinates(origin)
+            origin_piece = self.board.who_is_in(*cartesian_origin)
             cartesian_destination = self.atlas_to_cartesian_coordinates(destination)
+            destination_piece = self.board.who_is_in(*cartesian_destination)
 
+            """ Run normal actions """
             move = self.board.move(*cartesian_origin, *cartesian_destination, self.__white_turn)
 
             if move.value > 0:
@@ -82,6 +100,7 @@ class Game:
             result = move
 
         if result.value > 0:
+            """ Run needed subroutines if we have a successful move """
             separator = "-" if result is not MoveStatus.OK_KILL else "x"
 
             final_destination = separator + destination if destination is not None else ""
@@ -97,7 +116,7 @@ class Game:
 
             # Persist file if set
             if self.__apbs:
-                self.persist_state_to_file()
+                self.persist_move_to_file(origin_piece, destination_piece)
 
         # Print move result irregardless if successful or not
         if self.__pmr:
@@ -108,6 +127,23 @@ class Game:
             print(("=" * 100) + "\n\n\n")
 
         return result
+
+    def get_castling_piece(self, king_side=True, king=True):
+        """
+        Function to return the pieces involved when castling.
+
+        :param king_side: Determines which matching rook to get. Has no effect if king is true
+        :param king: Always returns the king unless specified
+        :return: Piece either Rook or King. May return None if no piece is in position
+        """
+        x = 4
+        y = 7 if self.__white_turn else 0
+
+        if not king:
+            """ Looking for our rook """
+            x = 7 if king_side == "O-O" else 0
+
+        return self.board.who_is_in(*[x, y])
 
     def print_recent_moves(self):
         """

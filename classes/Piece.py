@@ -10,9 +10,10 @@ class Piece:
     _collider = True
     value = 0
 
-    def __init__(self, x, y, white=True):
+    def __init__(self, x, y, uid, white=True):
         self._x = x
         self._y = y
+        self.uid = uid
         self.__white = white
 
         self.name = self.name.lower() if white else self.name.upper()

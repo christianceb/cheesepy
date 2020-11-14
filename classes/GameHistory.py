@@ -25,7 +25,5 @@ class GameHistory:
         for index, camo in enumerate(self.history):
             camo_string = "White" if index == 0 else "Black"
 
-            # So we get the most recent moves first
-            camo.reverse()
-
-            print(camo_string + ":" + ", ".join(camo))
+            # Reverse camo so we get the most recent moves first
+            print(camo_string + ":" + ", ".join(reversed(camo)))
